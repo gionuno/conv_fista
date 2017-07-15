@@ -10,12 +10,8 @@ And their effects on a test element a 0:
 
 ![image](H_for_0.png)
 
-![image](partial_sums_0.png)
-
-and a 1:
-
-![image](H_for_1.png)
-
-![image](partial_sums_1.png)
+![image](approx_0.png)
 
 Maybe I'll find a better scheme for the dictionary.
+
+Update: a line search, and a batch update were added.

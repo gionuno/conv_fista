@@ -17,34 +17,57 @@ from conv_fista import *;
 
 a = scio.loadmat("mnist_all.mat");
 
-D = 2;
+D = 10;
 I = 10;
 X = np.zeros((D*I,28,28));
 for i in range(I):
     for b in range(D):
-        X[D*i+b] = -0.5+a['train'+str(b)][i,:].reshape((28,28))/255.0;
+        X[D*i+b] = a['train'+str(b)][i,:].reshape((28,28))/255.0;
 
-L = 20;
-K = 7;
+L = 10;
+K = 5;
 d = 10.0;
 test = learner(X,L*L,K,d);
 
+D = 1.0*test.D;
 it = 0;
-while it < 10:
+while it < 4:
     print "Iteration: "+str(it);
-    test.step_D(5e-1,it);
+    test.step_D(1.0,it);
     it += 1;
+aux = np.abs(D-test.D);
 
 f,axarr = plt.subplots(L,L);
 for k in range(L):
     for l in range(L):
+        axarr[k,l].imshow(aux[L*k+l],cmap='gray');
+        #axarr[k,l].imshow(test.D[L*k+l,:,:],cmap='gray');
+        axarr[k,l].set_xticklabels([]);
+        axarr[k,l].set_yticklabels([]);
+        axarr[k,l].grid(False)
+plt.show()
+
+f,axarr = plt.subplots(L,L);
+for k in range(L):
+    for l in range(L):
+        axarr[k,l].imshow(D[L*k+l],cmap='gray');
+        #axarr[k,l].imshow(test.D[L*k+l,:,:],cmap='gray');
+        axarr[k,l].set_xticklabels([]);
+        axarr[k,l].set_yticklabels([]);
+        axarr[k,l].grid(False)
+plt.show()
+
+f,axarr = plt.subplots(L,L);
+for k in range(L):
+    for l in range(L):
+        #axarr[k,l].imshow(aux[L*k+l],cmap='gray');
         axarr[k,l].imshow(test.D[L*k+l,:,:],cmap='gray');
         axarr[k,l].set_xticklabels([]);
         axarr[k,l].set_yticklabels([]);
         axarr[k,l].grid(False)
 plt.show()
 
-x = a['test1'][100,:].reshape((28,28))/255.0;
+x = a['test6'][100,:].reshape((28,28))/255.0;
 A,f = test.step_A(x,0);
 print f;
 
@@ -61,7 +84,7 @@ s = np.zeros((x.shape[0],x.shape[1]));
 f,axarr = plt.subplots(L,L);
 for k in range(L):
     for l in range(L):
-        s += conv2d(A[L*k+l,:,:],test.D[L*k+l,:,:],'full');
+        s = conv2d(A[L*k+l,:,:],test.D[L*k+l,:,:],'full');
         axarr[k,l].imshow(s,cmap='gray');
         axarr[k,l].set_xticklabels([]);
         axarr[k,l].set_yticklabels([]);
